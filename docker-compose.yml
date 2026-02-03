@@ -2,22 +2,53 @@ services:
   web:
     build:
       context: ./web
+      dockerfile: Dockerfile
     ports:
       - "3000:3000"
     environment:
       - NEXT_PUBLIC_API_BASE=http://localhost:4000
     depends_on:
       - api
+    restart: unless-stopped
+
   api:
     build:
       context: ./server
+      dockerfile: Dockerfile
     ports:
       - "4000:4000"
     environment:
       - PORT=4000
-      - JWT_SECRET=dev-secret-change
+      - JWT_SECRET=dev-secret-change-this-in-production
       - DB_PATH=/data/famtree.db
     volumes:
+      # Option 1: Docker-managed volume (default)
       - famtree-data:/data
+      - famtree-uploads:/app/uploads
+      
+      # Option 2: Local directory mapping (uncomment and modify path)
+      # Windows: Uncomment one of these based on your setup
+      # - C:\Users\YourUsername\famtree-data:/data
+      # - C:\Users\YourUsername\famtree-uploads:/app/uploads
+      
+      # WSL2: Uncomment for WSL2
+      # - /mnt/c/Users/YourUsername/famtree-data:/data
+      # - /mnt/c/Users/YourUsername/famtree-uploads:/app/uploads
+      
+      # Linux: Uncomment for Linux
+      # - /home/youruser/famtree-data:/data
+      # - /home/youruser/famtree-uploads:/app/uploads
+      
+      # macOS: Uncomment for macOS
+      # - /Users/youruser/famtree-data:/data
+      # - /Users/youruser/famtree-uploads:/app/uploads
+      
+      # Relative path (same directory as docker-compose.yml)
+      # - ./data:/data
+      # - ./uploads:/app/uploads
+    restart: unless-stopped
+
+# Docker-managed volumes (comment out if using local directory mapping)
 volumes:
   famtree-data:
+  famtree-uploads:

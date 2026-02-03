@@ -125,8 +125,171 @@ npm run dev
 
 ## Docker Deployment
 
+### Quick Start
+
 ```bash
+# Build and start all services
 docker compose up --build
+
+# Run in detached mode (background)
+docker compose up -d --build
+
+# Stop services
+docker compose down
+
+# Stop and remove volumes (⚠️ deletes database)
+docker compose down -v
+```
+
+- **Web**: http://localhost:3000
+- **API**: http://localhost:4000
+
+### Docker Volume Configuration
+
+The application uses Docker volumes to persist data. By default, Docker manages these volumes internally, but you can map them to local directories for easier access and backups.
+
+#### Default Configuration (Docker-managed volumes)
+```yaml
+volumes:
+  famtree-data:  # Docker manages this volume
+```
+
+#### Map to Local Directories
+
+**Windows (PowerShell/CMD)**
+```yaml
+volumes:
+  api:
+    volumes:
+      - C:\Users\YourUsername\famtree-data:/data
+      - C:\Users\YourUsername\famtree-uploads:/app/uploads
+```
+
+**Windows (WSL2)**
+```yaml
+volumes:
+  api:
+    volumes:
+      - /mnt/c/Users/YourUsername/famtree-data:/data
+      - /mnt/c/Users/YourUsername/famtree-uploads:/app/uploads
+```
+
+**Linux**
+```yaml
+volumes:
+  api:
+    volumes:
+      - /home/youruser/famtree-data:/data
+      - /home/youruser/famtree-uploads:/app/uploads
+```
+
+**macOS**
+```yaml
+volumes:
+  api:
+    volumes:
+      - /Users/youruser/famtree-data:/data
+      - /Users/youruser/famtree-uploads:/app/uploads
+```
+
+#### Complete docker-compose.yml with Local Volumes
+
+<details>
+<summary>Click to expand example configuration</summary>
+
+```yaml
+services:
+  web:
+    build:
+      context: ./web
+    ports:
+      - "3000:3000"
+    environment:
+      - NEXT_PUBLIC_API_BASE=http://localhost:4000
+    depends_on:
+      - api
+
+  api:
+    build:
+      context: ./server
+    ports:
+      - "4000:4000"
+    environment:
+      - PORT=4000
+      - JWT_SECRET=change-this-secret-key-in-production
+      - DB_PATH=/data/famtree.db
+    volumes:
+      # Replace with your platform-specific paths
+      # Windows: C:\Users\YourName\famtree-data:/data
+      # Linux: /home/youruser/famtree-data:/data
+      # macOS: /Users/youruser/famtree-data:/data
+      - ./famtree-data:/data
+      - ./famtree-uploads:/app/uploads
+
+# If using Docker-managed volumes instead:
+# volumes:
+#   famtree-data:
+```
+</details>
+
+### Docker Volume Management
+
+**List volumes**
+```bash
+docker volume ls
+```
+
+**Inspect a volume**
+```bash
+docker volume inspect famtree_famtree-data
+```
+
+**Backup database (Docker-managed volume)**
+```bash
+# Copy from container to local directory
+docker compose cp api:/data/famtree.db ./backup/
+
+# Or create a backup while running
+docker compose exec api tar czf - /data | tar xzf - -C ./backup/
+```
+
+**Restore database**
+```bash
+# Copy to container
+docker compose cp ./backup/famtree.db api:/data/
+
+# Restart to apply
+docker compose restart api
+```
+
+### Dockerfile Details
+
+The project includes multi-stage Dockerfiles for optimized builds:
+
+**web/Dockerfile** (Next.js)
+- Stage 1: Install production dependencies
+- Stage 2: Build Next.js application
+- Stage 3: Run with minimal footprint (node:20-alpine)
+
+**server/Dockerfile** (Node.js/TypeScript)
+- Stage 1: Install production dependencies
+- Stage 2: Build TypeScript to JavaScript
+- Stage 3: Run compiled code with minimal footprint
+
+### Development with Docker
+
+For development with hot-reload:
+
+```bash
+# Use docker-compose.dev.yml if available, or:
+docker compose -f docker-compose.yml up --build
+
+# View logs
+docker compose logs -f
+
+# Access shell in running container
+docker compose exec api sh
+docker compose exec web sh
 ```
 
 ## Environment Variables
