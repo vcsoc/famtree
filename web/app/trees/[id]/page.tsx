@@ -314,13 +314,9 @@ export default function TreeBuilderPage() {
       const file = (e.target as HTMLInputElement).files?.[0];
       if (!file) return;
       
-      const confirmed = await new Promise<boolean>((resolve) => {
-        showConfirm(
-          'Import this .famtree file? This will add all people, relationships, and images to the current tree.',
-          () => resolve(true),
-          () => resolve(false)
-        );
-      });
+      const confirmed = await showConfirm(
+        'Import this .famtree file? This will add all people, relationships, and images to the current tree.'
+      );
       
       if (!confirmed) return;
       
@@ -2470,11 +2466,13 @@ export default function TreeBuilderPage() {
           <div className="context-menu-divider"></div>
           <button
             className="context-menu-delete"
-            onClick={() => {
-              showConfirm(
-                `Delete ${nodeContextMenu.person.first_name}? This will remove all relationships.`,
-                () => deletePerson(nodeContextMenu.person.id)
+            onClick={async () => {
+              const confirmed = await showConfirm(
+                `Delete ${nodeContextMenu.person.first_name}? This will remove all relationships.`
               );
+              if (confirmed) {
+                deletePerson(nodeContextMenu.person.id);
+              }
             }}
           >
             Delete Person
