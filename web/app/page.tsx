@@ -105,10 +105,9 @@ export default function HomePage() {
             assist your genealogy research.
           </p>
           <div className="actions">
-            <button className="primary" onClick={handleCreateTenant}>
-              Create tenant
+            <button className="primary" onClick={() => router.push("/demo")}>
+              Explore demo
             </button>
-            <button className="secondary">Explore demo</button>
           </div>
           {status ? <p className="muted">{status}</p> : null}
           {error ? <p className="muted">{error}</p> : null}

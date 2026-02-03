@@ -117,7 +117,7 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="container" style={{ paddingBottom: "48px" }}>
+    <div style={{ maxWidth: "100%", width: "100%", padding: "24px", paddingBottom: "48px" }}>
       <section className="panel">
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
           <div>
@@ -170,9 +170,9 @@ export default function DashboardPage() {
       )}
 
       {/* Metrics Charts */}
-      <section className="panel" style={{ marginBottom: "32px" }}>
+      <section className="panel" style={{ marginBottom: "32px", width: "100%" }}>
         <h3>Growth Metrics (Last 30 Days)</h3>
-        <ResponsiveContainer width="100%" height={300}>
+        <ResponsiveContainer width="100%" height={400}>
           <LineChart data={metrics}>
             <CartesianGrid strokeDasharray="3 3" stroke="#1f2937" />
             <XAxis dataKey="date" stroke="#94a3b8" />
@@ -195,10 +195,10 @@ export default function DashboardPage() {
           <h3>Gender Distribution</h3>
           <ResponsiveContainer width="100%" height={250}>
             <BarChart data={[
-              { name: "Males", value: statistics.totals.males },
-              { name: "Females", value: statistics.totals.females },
-              { name: "Other", value: statistics.totals.people - statistics.totals.males - statistics.totals.females }
-            ]}>
+              { name: "Males", value: statistics.totals.males || 0 },
+              { name: "Females", value: statistics.totals.females || 0 },
+              { name: "Other", value: Math.max(0, (statistics.totals.people || 0) - (statistics.totals.males || 0) - (statistics.totals.females || 0)) }
+            ].filter(item => item.value > 0)}>
               <CartesianGrid strokeDasharray="3 3" stroke="#1f2937" />
               <XAxis dataKey="name" stroke="#94a3b8" />
               <YAxis stroke="#94a3b8" />
