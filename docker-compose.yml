@@ -1,0 +1,23 @@
+services:
+  web:
+    build:
+      context: ./web
+    ports:
+      - "3000:3000"
+    environment:
+      - NEXT_PUBLIC_API_BASE=http://localhost:4000
+    depends_on:
+      - api
+  api:
+    build:
+      context: ./server
+    ports:
+      - "4000:4000"
+    environment:
+      - PORT=4000
+      - JWT_SECRET=dev-secret-change
+      - DB_PATH=/data/famtree.db
+    volumes:
+      - famtree-data:/data
+volumes:
+  famtree-data:

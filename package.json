@@ -1,0 +1,27 @@
+{
+  "name": "famtree",
+  "private": true,
+  "workspaces": [
+    "web",
+    "server"
+  ],
+  "scripts": {
+    "dev": "concurrently -n web,server -c blue,green \"npm run dev -w web\" \"cross-env PORT=4001 npm run dev -w server\"",
+    "build": "npm run build -w web && npm run build -w server",
+    "start": "concurrently -n web,server -c blue,green \"npm run start -w web\" \"npm run start -w server\"",
+    "lint": "npm run lint -w web"
+  },
+  "optionalDependencies": {
+    "@next/swc-darwin-arm64": "^14.2.5",
+    "@next/swc-darwin-x64": "^14.2.5",
+    "@next/swc-linux-arm64-gnu": "^14.2.5",
+    "@next/swc-linux-arm64-musl": "^14.2.5",
+    "@next/swc-linux-x64-gnu": "^14.2.5",
+    "@next/swc-linux-x64-musl": "^14.2.5",
+    "@next/swc-win32-x64-msvc": "^14.2.5"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.0",
+    "cross-env": "^7.0.3"
+  }
+}
