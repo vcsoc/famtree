@@ -23,13 +23,13 @@ services:
       - DB_PATH=/data/famtree.db
     volumes:
       # Option 1: Docker-managed volume (default)
-      - famtree-data:/data
-      - famtree-uploads:/app/uploads
+      #- famtree-data:/data
+      #- famtree-uploads:/app/uploads
       
       # Option 2: Local directory mapping (uncomment and modify path)
       # Windows: Uncomment one of these based on your setup
-      # - C:\Users\YourUsername\famtree-data:/data
-      # - C:\Users\YourUsername\famtree-uploads:/app/uploads
+      - /c/.vcsoc/data/docker/famtree/data:/data
+      - /c/.vcsoc/data/docker/famtree/uploads:/app/uploads
       
       # WSL2: Uncomment for WSL2
       # - /mnt/c/Users/YourUsername/famtree-data:/data
