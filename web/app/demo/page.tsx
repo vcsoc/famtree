@@ -871,20 +871,33 @@ export default function DemoPage() {
                     <div 
                       className="photo-zoom-icon"
                       onMouseEnter={(e) => {
+                        e.stopPropagation();
                         const previewWidth = 650;
                         const previewHeight = 650;
-                        let x = e.clientX + 15;
-                        let y = e.clientY + 15;
+                        const padding = 10;
+                        
+                        let x = e.clientX + padding;
+                        let y = e.clientY + padding;
 
-                        // Ensure popup stays within viewport
-                        if (x + previewWidth > window.innerWidth) {
-                          x = e.clientX - previewWidth - 15;
+                        // Check right edge
+                        if (x + previewWidth > window.innerWidth - padding) {
+                          x = e.clientX - previewWidth - padding;
                         }
-                        if (y + previewHeight > window.innerHeight) {
-                          y = window.innerHeight - previewHeight - 10;
+                        
+                        // Check bottom edge
+                        if (y + previewHeight > window.innerHeight - padding) {
+                          y = e.clientY - previewHeight - padding;
                         }
-                        if (x < 0) x = 10;
-                        if (y < 0) y = 10;
+                        
+                        // Check left edge
+                        if (x < padding) {
+                          x = padding;
+                        }
+                        
+                        // Check top edge
+                        if (y < padding) {
+                          y = padding;
+                        }
 
                         setPhotoPreview({
                           personId: person.id,
@@ -894,21 +907,34 @@ export default function DemoPage() {
                         });
                       }}
                       onMouseMove={(e) => {
+                        e.stopPropagation();
                         if (photoPreview?.personId === person.id) {
                           const previewWidth = 650;
                           const previewHeight = 650;
-                          let x = e.clientX + 15;
-                          let y = e.clientY + 15;
+                          const padding = 10;
+                          
+                          let x = e.clientX + padding;
+                          let y = e.clientY + padding;
 
-                          // Ensure popup stays within viewport
-                          if (x + previewWidth > window.innerWidth) {
-                            x = e.clientX - previewWidth - 15;
+                          // Check right edge
+                          if (x + previewWidth > window.innerWidth - padding) {
+                            x = e.clientX - previewWidth - padding;
                           }
-                          if (y + previewHeight > window.innerHeight) {
-                            y = window.innerHeight - previewHeight - 10;
+                          
+                          // Check bottom edge
+                          if (y + previewHeight > window.innerHeight - padding) {
+                            y = e.clientY - previewHeight - padding;
                           }
-                          if (x < 0) x = 10;
-                          if (y < 0) y = 10;
+                          
+                          // Check left edge
+                          if (x < padding) {
+                            x = padding;
+                          }
+                          
+                          // Check top edge
+                          if (y < padding) {
+                            y = padding;
+                          }
 
                           setPhotoPreview({
                             personId: person.id,
@@ -918,7 +944,10 @@ export default function DemoPage() {
                           });
                         }
                       }}
-                      onMouseLeave={() => setPhotoPreview(null)}
+                      onMouseLeave={(e) => {
+                        e.stopPropagation();
+                        setPhotoPreview(null);
+                      }}
                       onClick={(e) => e.stopPropagation()}
                       onPointerDown={(e) => e.stopPropagation()}
                     >
