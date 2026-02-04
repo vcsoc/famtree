@@ -880,7 +880,7 @@ export default function TreeBuilderPage() {
       photoDiv.style.color = '#f8fafc';
 
       if (person.photo_url) {
-        photoDiv.style.backgroundImage = `url(${person.photo_url})`;
+        photoDiv.style.backgroundImage = `url(${getPhotoUrl(person.photo_url)})`;
         photoDiv.style.backgroundSize = 'cover';
         photoDiv.style.backgroundPosition = 'center';
       } else {
@@ -1049,7 +1049,7 @@ export default function TreeBuilderPage() {
       <clipPath id="clip-${person.id}">
         <circle cx="35" cy="35" r="25"/>
       </clipPath>
-      <image x="10" y="10" width="50" height="50" href="${person.photo_url}" 
+      <image x="10" y="10" width="50" height="50" href="${getPhotoUrl(person.photo_url)}" 
              clip-path="url(#clip-${person.id})" preserveAspectRatio="xMidYMid slice"/>`;
       } else {
         svgContent += `
