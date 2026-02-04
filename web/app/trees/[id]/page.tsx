@@ -1404,6 +1404,32 @@ export default function TreeBuilderPage() {
             </div>
           </div>
         </div>
+
+        {/* Canvas Location */}
+        <div style={{ 
+          background: "#0f172a", 
+          border: "1px solid #1f2937",
+          borderRadius: "12px",
+          padding: "12px",
+          marginBottom: "16px"
+        }}>
+          <h3 style={{ fontSize: "14px", marginBottom: "12px", color: "#94a3b8" }}>Canvas Location</h3>
+          
+          <div style={{ fontSize: "12px", display: "flex", flexDirection: "column", gap: "6px" }}>
+            <div style={{ display: "flex", justifyContent: "space-between" }}>
+              <span className="muted">Latitude (Y)</span>
+              <span style={{ color: "#22d3ee", fontFamily: "monospace" }}>{Math.round(pan.y)}</span>
+            </div>
+            <div style={{ display: "flex", justifyContent: "space-between" }}>
+              <span className="muted">Longitude (X)</span>
+              <span style={{ color: "#22d3ee", fontFamily: "monospace" }}>{Math.round(pan.x)}</span>
+            </div>
+            <div style={{ display: "flex", justifyContent: "space-between" }}>
+              <span className="muted">Zoom Level</span>
+              <span style={{ color: "#10b981", fontFamily: "monospace" }}>{(zoom * 100).toFixed(0)}%</span>
+            </div>
+          </div>
+        </div>
         
         <div className="zoom-controls">
           <button onClick={() => setZoom(prev => Math.min(prev + 0.1, 3))} title="Zoom In">

@@ -1,7 +1,7 @@
 import "./globals.css";
 import type { ReactNode } from "react";
 import { NotificationProvider } from "./components/NotificationProvider";
-import { LiveMetrics } from "./components/LiveMetrics";
+import { UserMenu } from "./components/UserMenu";
 
 export const metadata = {
   title: "FamTree",
@@ -22,7 +22,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
                 <a href="/ai-research">AI Research</a>
                 <a href="/dashboard">Dashboard</a>
               </nav>
-              <LiveMetrics />
+              <UserMenu />
               <div className="copyright">© 2026 FamTree</div>
             </header>
             <main className="app-main">{children}</main>
