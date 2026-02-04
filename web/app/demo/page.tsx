@@ -872,7 +872,7 @@ export default function DemoPage() {
                       className="photo-zoom-icon"
                       onMouseEnter={(e) => {
                         e.stopPropagation();
-                        const previewSize = 650;
+                        const previewSize = 550;
                         const offset = 20;
                         
                         // Start with cursor position plus offset
@@ -903,7 +903,7 @@ export default function DemoPage() {
                       onMouseMove={(e) => {
                         e.stopPropagation();
                         if (photoPreview?.personId === person.id) {
-                          const previewSize = 650;
+                          const previewSize = 550;
                           const offset = 20;
                           
                           // Start with cursor position plus offset
@@ -1026,24 +1026,41 @@ export default function DemoPage() {
             position: 'fixed',
             left: photoPreview.x,
             top: photoPreview.y,
-            width: '650px',
-            height: '650px',
+            width: '550px',
+            height: '550px',
             background: '#1e293b',
             border: '2px solid #475569',
             borderRadius: '12px',
             boxShadow: '0 20px 60px rgba(0, 0, 0, 0.5)',
             overflow: 'hidden',
             zIndex: 10000,
-            pointerEvents: 'none'
+            pointerEvents: 'none',
+            position: 'relative'
           }}
         >
+          {/* Blurred background */}
+          <img
+            src={photoPreview.photoUrl}
+            alt="Background"
+            style={{
+              position: 'absolute',
+              width: '100%',
+              height: '100%',
+              objectFit: 'cover',
+              filter: 'blur(20px)',
+              opacity: 0.3
+            }}
+          />
+          {/* Main image */}
           <img
             src={photoPreview.photoUrl}
             alt="Preview"
             style={{
+              position: 'absolute',
               width: '100%',
               height: '100%',
-              objectFit: 'contain'
+              objectFit: 'contain',
+              zIndex: 1
             }}
           />
         </div>
