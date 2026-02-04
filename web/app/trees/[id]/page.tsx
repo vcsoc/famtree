@@ -2121,37 +2121,38 @@ export default function TreeBuilderPage() {
           />
         )}
 
-        {/* Photo Preview Popup */}
-        {photoPreview && (
-          <div
-            style={{
-              position: 'fixed',
-              left: photoPreview.x,
-              top: photoPreview.y,
-              width: '650px',
-              height: '650px',
-              background: '#1e293b',
-              border: '2px solid #475569',
-              borderRadius: '12px',
-              boxShadow: '0 20px 60px rgba(0, 0, 0, 0.5)',
-              overflow: 'hidden',
-              zIndex: 10000,
-              pointerEvents: 'none'
-            }}
-          >
-            <img
-              src={photoPreview.photoUrl}
-              alt="Preview"
-              style={{
-                width: '100%',
-                height: '100%',
-                objectFit: 'contain'
-              }}
-            />
-          </div>
-        )}
         </div>
       </section>
+
+      {/* Photo Preview Popup - rendered outside canvas to avoid transform issues */}
+      {photoPreview && (
+        <div
+          style={{
+            position: 'fixed',
+            left: photoPreview.x,
+            top: photoPreview.y,
+            width: '650px',
+            height: '650px',
+            background: '#1e293b',
+            border: '2px solid #475569',
+            borderRadius: '12px',
+            boxShadow: '0 20px 60px rgba(0, 0, 0, 0.5)',
+            overflow: 'hidden',
+            zIndex: 10000,
+            pointerEvents: 'none'
+          }}
+        >
+          <img
+            src={photoPreview.photoUrl}
+            alt="Preview"
+            style={{
+              width: '100%',
+              height: '100%',
+              objectFit: 'contain'
+            }}
+          />
+        </div>
+      )}
 
       {/* Settings Blade */}
       {showSettings && (
