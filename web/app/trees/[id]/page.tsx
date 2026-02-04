@@ -2143,7 +2143,10 @@ export default function TreeBuilderPage() {
             boxShadow: '0 20px 60px rgba(0, 0, 0, 0.5)',
             overflow: 'hidden',
             zIndex: 10000,
-            pointerEvents: 'none'
+            pointerEvents: 'none',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center'
           }}
         >
           {/* Blurred background */}
@@ -2152,21 +2155,26 @@ export default function TreeBuilderPage() {
             alt="Background"
             style={{
               position: 'absolute',
+              top: 0,
+              left: 0,
               width: '100%',
               height: '100%',
               objectFit: 'cover',
-              filter: 'blur(20px)',
-              opacity: 0.3
+              filter: 'blur(30px)',
+              opacity: 0.4,
+              transform: 'scale(1.1)'
             }}
           />
-          {/* Main image */}
+          {/* Main image - scaled to 550px on longest edge */}
           <img
             src={photoPreview.photoUrl}
             alt="Preview"
             style={{
-              position: 'absolute',
-              width: '100%',
-              height: '100%',
+              position: 'relative',
+              maxWidth: '550px',
+              maxHeight: '550px',
+              width: 'auto',
+              height: 'auto',
               objectFit: 'contain',
               zIndex: 1
             }}
