@@ -662,12 +662,24 @@ export default function TreeBuilderPage() {
     try {
       // Transform snake_case to camelCase for API
       const payload: any = {};
-      if (editingPerson.first_name !== undefined) payload.firstName = editingPerson.first_name;
-      if (editingPerson.middle_name !== undefined) payload.middleName = editingPerson.middle_name;
-      if (editingPerson.last_name !== undefined) payload.lastName = editingPerson.last_name;
-      if (editingPerson.gender !== undefined) payload.gender = editingPerson.gender;
-      if (editingPerson.birth_date !== undefined) payload.birthDate = editingPerson.birth_date;
-      if (editingPerson.death_date !== undefined) payload.deathDate = editingPerson.death_date;
+      if (editingPerson.first_name !== undefined && editingPerson.first_name !== '') {
+        payload.firstName = editingPerson.first_name;
+      }
+      if (editingPerson.middle_name !== undefined && editingPerson.middle_name !== '') {
+        payload.middleName = editingPerson.middle_name || null;
+      }
+      if (editingPerson.last_name !== undefined && editingPerson.last_name !== '') {
+        payload.lastName = editingPerson.last_name || null;
+      }
+      if (editingPerson.gender !== undefined && editingPerson.gender !== '') {
+        payload.gender = editingPerson.gender || null;
+      }
+      if (editingPerson.birth_date !== undefined && editingPerson.birth_date !== '') {
+        payload.birthDate = editingPerson.birth_date || null;
+      }
+      if (editingPerson.death_date !== undefined && editingPerson.death_date !== '') {
+        payload.deathDate = editingPerson.death_date || null;
+      }
       
       const res = await fetch(`${apiBase}/api/people/${selectedPerson.id}`, {
         method: "PUT",

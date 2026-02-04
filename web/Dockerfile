@@ -12,6 +12,10 @@ RUN npm install --only=production
 FROM node:20-alpine AS builder
 WORKDIR /app
 
+# Accept build arguments
+ARG NEXT_PUBLIC_API_BASE
+ENV NEXT_PUBLIC_API_BASE=$NEXT_PUBLIC_API_BASE
+
 # Copy package files and install all dependencies (including dev)
 COPY package*.json ./
 RUN npm install
