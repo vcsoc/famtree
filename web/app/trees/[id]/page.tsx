@@ -46,20 +46,8 @@ export default function TreeBuilderPage() {
   const [nodeContextMenu, setNodeContextMenu] = useState<{ person: Person; x: number; y: number } | null>(null);
   const [hoveredRel, setHoveredRel] = useState<string | null>(null);
   const [showAddForm, setShowAddForm] = useState(false);
-  const [zoom, setZoom] = useState(() => {
-    if (typeof window !== 'undefined') {
-      const saved = localStorage.getItem(`tree-${treeId}-zoom`);
-      return saved ? parseFloat(saved) : 1;
-    }
-    return 1;
-  });
-  const [pan, setPan] = useState(() => {
-    if (typeof window !== 'undefined') {
-      const saved = localStorage.getItem(`tree-${treeId}-pan`);
-      return saved ? JSON.parse(saved) : { x: 0, y: 0 };
-    }
-    return { x: 0, y: 0 };
-  });
+  const [zoom, setZoom] = useState(1);
+  const [pan, setPan] = useState({ x: 0, y: 0 });
   const [isPanning, setIsPanning] = useState(false);
   const [panStart, setPanStart] = useState({ x: 0, y: 0 });
   const [dragStart, setDragStart] = useState<{ x: number; y: number; personId: string } | null>(null);
@@ -109,6 +97,21 @@ export default function TreeBuilderPage() {
       localStorage.setItem(`tree-${treeId}-pan`, JSON.stringify(pan));
     }
   }, [zoom, pan, treeId]);
+
+  // Load saved canvas position after mount
+  useEffect(() => {
+    if (typeof window !== 'undefined' && treeId) {
+      const savedZoom = localStorage.getItem(`tree-${treeId}-zoom`);
+      const savedPan = localStorage.getItem(`tree-${treeId}-pan`);
+      
+      if (savedZoom) {
+        setZoom(parseFloat(savedZoom));
+      }
+      if (savedPan) {
+        setPan(JSON.parse(savedPan));
+      }
+    }
+  }, [treeId]);
 
   const personMap = useMemo(
     () => new Map(people.map((p) => [p.id, p])),
