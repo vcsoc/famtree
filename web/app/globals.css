@@ -379,12 +379,37 @@ select option {
   background: var(--bg);
   border: 1px solid var(--border);
   margin: 0 auto;
+  position: relative;
 }
 
 .person-photo img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+
+.photo-zoom-icon {
+  position: absolute;
+  bottom: 2px;
+  right: 2px;
+  width: 18px;
+  height: 18px;
+  background: rgba(0, 0, 0, 0.7);
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  cursor: pointer;
+  opacity: 0.8;
+  transition: all 0.2s;
+  z-index: 10;
+}
+
+.photo-zoom-icon:hover {
+  opacity: 1;
+  background: rgba(0, 0, 0, 0.9);
+  transform: scale(1.1);
 }
 
 .photo-placeholder {

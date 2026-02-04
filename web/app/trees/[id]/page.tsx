@@ -82,6 +82,7 @@ export default function TreeBuilderPage() {
   const [isDraggingOver, setIsDraggingOver] = useState(false);
   const [dragOverPersonId, setDragOverPersonId] = useState<string | null>(null);
   const [isDraggingFamtree, setIsDraggingFamtree] = useState(false);
+  const [photoPreview, setPhotoPreview] = useState<{ personId: string; photoUrl: string; x: number; y: number } | null>(null);
   const boardRef = useRef<HTMLDivElement>(null);
   const zoomRef = useRef(1);
   const panRef = useRef({ x: 0, y: 0 });
@@ -662,24 +663,33 @@ export default function TreeBuilderPage() {
     try {
       // Transform snake_case to camelCase for API
       const payload: any = {};
-      if (editingPerson.first_name !== undefined && editingPerson.first_name !== '') {
-        payload.firstName = editingPerson.first_name;
+      if (editingPerson.first_name !== undefined) {
+        payload.firstName = editingPerson.first_name || undefined;
       }
-      if (editingPerson.middle_name !== undefined && editingPerson.middle_name !== '') {
-        payload.middleName = editingPerson.middle_name || null;
+      if (editingPerson.middle_name !== undefined) {
+        payload.middleName = editingPerson.middle_name || undefined;
       }
-      if (editingPerson.last_name !== undefined && editingPerson.last_name !== '') {
-        payload.lastName = editingPerson.last_name || null;
+      if (editingPerson.last_name !== undefined) {
+        payload.lastName = editingPerson.last_name || undefined;
       }
-      if (editingPerson.gender !== undefined && editingPerson.gender !== '') {
-        payload.gender = editingPerson.gender || null;
+      if (editingPerson.gender !== undefined) {
+        payload.gender = editingPerson.gender || undefined;
       }
-      if (editingPerson.birth_date !== undefined && editingPerson.birth_date !== '') {
-        payload.birthDate = editingPerson.birth_date || null;
+      if (editingPerson.birth_date !== undefined) {
+        payload.birthDate = editingPerson.birth_date || undefined;
       }
-      if (editingPerson.death_date !== undefined && editingPerson.death_date !== '') {
-        payload.deathDate = editingPerson.death_date || null;
+      if (editingPerson.death_date !== undefined) {
+        payload.deathDate = editingPerson.death_date || undefined;
       }
+      
+      // Remove undefined values
+      Object.keys(payload).forEach(key => {
+        if (payload[key] === undefined) {
+          delete payload[key];
+        }
+      });
+      
+      console.log('Update payload:', payload);
       
       const res = await fetch(`${apiBase}/api/people/${selectedPerson.id}`, {
         method: "PUT",
@@ -695,6 +705,7 @@ export default function TreeBuilderPage() {
         setEditingPerson({});
       } else {
         const data = await res.json();
+        console.error('Update failed:', data);
         showAlert(`Failed to update: ${data.error || 'Unknown error'}`, 'error');
       }
     } catch (err) {
@@ -1947,7 +1958,26 @@ export default function TreeBuilderPage() {
             >
               <div className="person-photo">
                 {person.photo_url ? (
-                  <img src={getPhotoUrl(person.photo_url) || ''} alt={name} />
+                  <>
+                    <img src={getPhotoUrl(person.photo_url) || ''} alt={name} />
+                    <div 
+                      className="photo-zoom-icon"
+                      onMouseEnter={(e) => {
+                        const rect = e.currentTarget.getBoundingClientRect();
+                        setPhotoPreview({
+                          personId: person.id,
+                          photoUrl: getPhotoUrl(person.photo_url) || '',
+                          x: rect.right + 10,
+                          y: rect.top
+                        });
+                      }}
+                      onMouseLeave={() => setPhotoPreview(null)}
+                      onClick={(e) => e.stopPropagation()}
+                      onPointerDown={(e) => e.stopPropagation()}
+                    >
+                      🔍
+                    </div>
+                  </>
                 ) : (
                   <div className={`photo-placeholder ${person.gender === 'female' ? 'female' : ''} ${person.death_date ? 'deceased' : ''}`}>{person.first_name[0]}</div>
                 )}
@@ -2014,6 +2044,36 @@ export default function TreeBuilderPage() {
               height: Math.abs(selectionEnd.y - selectionStart.y)
             }}
           />
+        )}
+
+        {/* Photo Preview Popup */}
+        {photoPreview && (
+          <div
+            style={{
+              position: 'fixed',
+              left: photoPreview.x,
+              top: photoPreview.y,
+              width: '650px',
+              height: '650px',
+              background: '#1e293b',
+              border: '2px solid #475569',
+              borderRadius: '12px',
+              boxShadow: '0 20px 60px rgba(0, 0, 0, 0.5)',
+              overflow: 'hidden',
+              zIndex: 10000,
+              pointerEvents: 'none'
+            }}
+          >
+            <img
+              src={photoPreview.photoUrl}
+              alt="Preview"
+              style={{
+                width: '100%',
+                height: '100%',
+                objectFit: 'contain'
+              }}
+            />
+          </div>
         )}
         </div>
       </section>

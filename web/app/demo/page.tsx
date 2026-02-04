@@ -61,6 +61,7 @@ export default function DemoPage() {
     birthDate: "",
     deathDate: ""
   });
+  const [photoPreview, setPhotoPreview] = useState<{ personId: string; photoUrl: string; x: number; y: number } | null>(null);
   const boardRef = useRef<HTMLDivElement>(null);
   const zoomRef = useRef(1);
   const panRef = useRef({ x: 0, y: 0 });
@@ -865,7 +866,26 @@ export default function DemoPage() {
             >
               <div className="person-photo">
                 {person.photo_url ? (
-                  <img src={person.photo_url} alt={name} />
+                  <>
+                    <img src={person.photo_url} alt={name} />
+                    <div 
+                      className="photo-zoom-icon"
+                      onMouseEnter={(e) => {
+                        const rect = e.currentTarget.getBoundingClientRect();
+                        setPhotoPreview({
+                          personId: person.id,
+                          photoUrl: person.photo_url || '',
+                          x: rect.right + 10,
+                          y: rect.top
+                        });
+                      }}
+                      onMouseLeave={() => setPhotoPreview(null)}
+                      onClick={(e) => e.stopPropagation()}
+                      onPointerDown={(e) => e.stopPropagation()}
+                    >
+                      🔍
+                    </div>
+                  </>
                 ) : (
                   <div className={`photo-placeholder ${person.gender === 'female' ? 'female' : ''} ${person.death_date ? 'deceased' : ''}`}>
                     {person.first_name[0]}
@@ -938,6 +958,36 @@ export default function DemoPage() {
               pointerEvents: 'none'
             }}
           />
+        )}
+
+        {/* Photo Preview Popup */}
+        {photoPreview && (
+          <div
+            style={{
+              position: 'fixed',
+              left: photoPreview.x,
+              top: photoPreview.y,
+              width: '650px',
+              height: '650px',
+              background: '#1e293b',
+              border: '2px solid #475569',
+              borderRadius: '12px',
+              boxShadow: '0 20px 60px rgba(0, 0, 0, 0.5)',
+              overflow: 'hidden',
+              zIndex: 10000,
+              pointerEvents: 'none'
+            }}
+          >
+            <img
+              src={photoPreview.photoUrl}
+              alt="Preview"
+              style={{
+                width: '100%',
+                height: '100%',
+                objectFit: 'contain'
+              }}
+            />
+          </div>
         )}
         </div>
       </section>
