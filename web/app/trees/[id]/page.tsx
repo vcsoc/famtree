@@ -1979,20 +1979,50 @@ export default function TreeBuilderPage() {
                     <div 
                       className="photo-zoom-icon"
                       onMouseEnter={(e) => {
+                        const previewWidth = 650;
+                        const previewHeight = 650;
+                        let x = e.clientX + 15;
+                        let y = e.clientY + 15;
+
+                        // Ensure popup stays within viewport
+                        if (x + previewWidth > window.innerWidth) {
+                          x = e.clientX - previewWidth - 15;
+                        }
+                        if (y + previewHeight > window.innerHeight) {
+                          y = window.innerHeight - previewHeight - 10;
+                        }
+                        if (x < 0) x = 10;
+                        if (y < 0) y = 10;
+
                         setPhotoPreview({
                           personId: person.id,
                           photoUrl: getPhotoUrl(person.photo_url) || '',
-                          x: e.clientX + 15,
-                          y: e.clientY - 325
+                          x,
+                          y
                         });
                       }}
                       onMouseMove={(e) => {
                         if (photoPreview?.personId === person.id) {
+                          const previewWidth = 650;
+                          const previewHeight = 650;
+                          let x = e.clientX + 15;
+                          let y = e.clientY + 15;
+
+                          // Ensure popup stays within viewport
+                          if (x + previewWidth > window.innerWidth) {
+                            x = e.clientX - previewWidth - 15;
+                          }
+                          if (y + previewHeight > window.innerHeight) {
+                            y = window.innerHeight - previewHeight - 10;
+                          }
+                          if (x < 0) x = 10;
+                          if (y < 0) y = 10;
+
                           setPhotoPreview({
                             personId: person.id,
                             photoUrl: getPhotoUrl(person.photo_url) || '',
-                            x: e.clientX + 15,
-                            y: e.clientY - 325
+                            x,
+                            y
                           });
                         }
                       }}
