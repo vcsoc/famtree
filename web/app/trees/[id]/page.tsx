@@ -92,16 +92,8 @@ export default function TreeBuilderPage() {
   const [isDraggingFamtree, setIsDraggingFamtree] = useState(false);
   const [photoPreview, setPhotoPreview] = useState<{ personId: string; photoUrl: string; x: number; y: number } | null>(null);
   const boardRef = useRef<HTMLDivElement>(null);
-  const zoomRef = useRef(() => {
-    if (typeof window === 'undefined') return 1;
-    const saved = localStorage.getItem(`tree-${params?.id}-zoom`);
-    return saved ? parseFloat(saved) : 1;
-  }());
-  const panRef = useRef(() => {
-    if (typeof window === 'undefined') return { x: 0, y: 0 };
-    const saved = localStorage.getItem(`tree-${params?.id}-pan`);
-    return saved ? JSON.parse(saved) : { x: 0, y: 0 };
-  }());
+  const zoomRef = useRef(1);
+  const panRef = useRef({ x: 0, y: 0 });
   const { showAlert, showConfirm, showCustomConfirm } = useNotification();
 
   // Keep refs in sync with state and persist to localStorage
@@ -113,6 +105,12 @@ export default function TreeBuilderPage() {
       localStorage.setItem(`tree-${treeId}-pan`, JSON.stringify(pan));
     }
   }, [zoom, pan, treeId]);
+
+  // Sync refs on initial load
+  useEffect(() => {
+    zoomRef.current = zoom;
+    panRef.current = pan;
+  }, []);
 
   const personMap = useMemo(
     () => new Map(people.map((p) => [p.id, p])),
