@@ -2143,8 +2143,7 @@ export default function TreeBuilderPage() {
             boxShadow: '0 20px 60px rgba(0, 0, 0, 0.5)',
             overflow: 'hidden',
             zIndex: 10000,
-            pointerEvents: 'none',
-            position: 'relative'
+            pointerEvents: 'none'
           }}
         >
           {/* Blurred background */}
