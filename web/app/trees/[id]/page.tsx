@@ -128,6 +128,14 @@ export default function TreeBuilderPage() {
     return `${apiBase}${photoUrl}`;
   };
 
+  const getOriginalPhotoUrl = (photoUrl?: string) => {
+    if (!photoUrl) return null;
+    const url = getPhotoUrl(photoUrl);
+    if (!url) return null;
+    // Convert thumbnail URL to original URL
+    return url.replace('/thumbnails/', '/originals/');
+  };
+
   useEffect(() => {
     const stored = localStorage.getItem("famtree_token");
     if (stored && treeId) {
@@ -2010,7 +2018,7 @@ export default function TreeBuilderPage() {
 
                         setPhotoPreview({
                           personId: person.id,
-                          photoUrl: getPhotoUrl(person.photo_url) || '',
+                          photoUrl: getOriginalPhotoUrl(person.photo_url) || '',
                           x,
                           y
                         });
@@ -2041,7 +2049,7 @@ export default function TreeBuilderPage() {
 
                           setPhotoPreview({
                             personId: person.id,
-                            photoUrl: getPhotoUrl(person.photo_url) || '',
+                            photoUrl: getOriginalPhotoUrl(person.photo_url) || '',
                             x,
                             y
                           });

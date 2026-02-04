@@ -490,13 +490,14 @@ router.post("/people/:id/photo", authRequired, upload.single("photo"), async (re
       .jpeg({ quality: 90 })
       .toFile(originalPath);
 
-    // Generate thumbnail
+    // Generate thumbnail (120x120 for node display, cropped)
     await sharp(req.file.buffer)
       .resize(120, 120, { fit: "cover" })
       .jpeg({ quality: 85 })
       .toFile(thumbnailPath);
 
     const photoUrl = `/uploads/thumbnails/${filename}`;
+    const originalUrl = `/uploads/originals/${filename}`;
     
     // Check if person has any images
     const existingImages = await db.all("SELECT id FROM person_images WHERE person_id = ?", personId);
@@ -506,15 +507,15 @@ router.post("/people/:id/photo", authRequired, upload.single("photo"), async (re
     const imageId = createId();
     await db.run(
       "INSERT INTO person_images (id, person_id, image_url, is_primary) VALUES (?, ?, ?, ?)",
-      imageId, personId, photoUrl, isPrimary
+      imageId, personId, originalUrl, isPrimary
     );
 
-    // Update photo_url for backward compatibility
+    // Update photo_url with thumbnail for backward compatibility (node display)
     if (isPrimary) {
       await db.run("UPDATE people SET photo_url = ? WHERE id = ?", photoUrl, personId);
     }
 
-    res.json({ photo_url: photoUrl, image_id: imageId, is_primary: isPrimary === 1 });
+    res.json({ photo_url: photoUrl, original_url: originalUrl, image_id: imageId, is_primary: isPrimary === 1 });
   } catch (error) {
     console.error("Photo upload error:", error);
     res.status(500).json({ error: "Failed to upload photo" });
