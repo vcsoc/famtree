@@ -2171,10 +2171,8 @@ export default function TreeBuilderPage() {
             alt="Preview"
             style={{
               position: 'relative',
-              maxWidth: '550px',
-              maxHeight: '550px',
-              width: 'auto',
-              height: 'auto',
+              width: '550px',
+              height: '550px',
               objectFit: 'contain',
               zIndex: 1
             }}
