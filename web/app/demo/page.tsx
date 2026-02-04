@@ -871,13 +871,22 @@ export default function DemoPage() {
                     <div 
                       className="photo-zoom-icon"
                       onMouseEnter={(e) => {
-                        const rect = e.currentTarget.getBoundingClientRect();
                         setPhotoPreview({
                           personId: person.id,
                           photoUrl: person.photo_url || '',
-                          x: rect.right + 10,
-                          y: rect.top
+                          x: e.clientX + 15,
+                          y: e.clientY - 325
                         });
+                      }}
+                      onMouseMove={(e) => {
+                        if (photoPreview?.personId === person.id) {
+                          setPhotoPreview({
+                            personId: person.id,
+                            photoUrl: person.photo_url || '',
+                            x: e.clientX + 15,
+                            y: e.clientY - 325
+                          });
+                        }
                       }}
                       onMouseLeave={() => setPhotoPreview(null)}
                       onClick={(e) => e.stopPropagation()}

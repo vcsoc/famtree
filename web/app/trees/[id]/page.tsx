@@ -46,8 +46,20 @@ export default function TreeBuilderPage() {
   const [nodeContextMenu, setNodeContextMenu] = useState<{ person: Person; x: number; y: number } | null>(null);
   const [hoveredRel, setHoveredRel] = useState<string | null>(null);
   const [showAddForm, setShowAddForm] = useState(false);
-  const [zoom, setZoom] = useState(1);
-  const [pan, setPan] = useState({ x: 0, y: 0 });
+  const [zoom, setZoom] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem(`tree-${treeId}-zoom`);
+      return saved ? parseFloat(saved) : 1;
+    }
+    return 1;
+  });
+  const [pan, setPan] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem(`tree-${treeId}-pan`);
+      return saved ? JSON.parse(saved) : { x: 0, y: 0 };
+    }
+    return { x: 0, y: 0 };
+  });
   const [isPanning, setIsPanning] = useState(false);
   const [panStart, setPanStart] = useState({ x: 0, y: 0 });
   const [dragStart, setDragStart] = useState<{ x: number; y: number; personId: string } | null>(null);
@@ -88,11 +100,15 @@ export default function TreeBuilderPage() {
   const panRef = useRef({ x: 0, y: 0 });
   const { showAlert, showConfirm, showCustomConfirm } = useNotification();
 
-  // Keep refs in sync with state
+  // Keep refs in sync with state and persist to localStorage
   useEffect(() => {
     zoomRef.current = zoom;
     panRef.current = pan;
-  }, [zoom, pan]);
+    if (typeof window !== 'undefined' && treeId) {
+      localStorage.setItem(`tree-${treeId}-zoom`, zoom.toString());
+      localStorage.setItem(`tree-${treeId}-pan`, JSON.stringify(pan));
+    }
+  }, [zoom, pan, treeId]);
 
   const personMap = useMemo(
     () => new Map(people.map((p) => [p.id, p])),
@@ -1963,13 +1979,22 @@ export default function TreeBuilderPage() {
                     <div 
                       className="photo-zoom-icon"
                       onMouseEnter={(e) => {
-                        const rect = e.currentTarget.getBoundingClientRect();
                         setPhotoPreview({
                           personId: person.id,
                           photoUrl: getPhotoUrl(person.photo_url) || '',
-                          x: rect.right + 10,
-                          y: rect.top
+                          x: e.clientX + 15,
+                          y: e.clientY - 325
                         });
+                      }}
+                      onMouseMove={(e) => {
+                        if (photoPreview?.personId === person.id) {
+                          setPhotoPreview({
+                            personId: person.id,
+                            photoUrl: getPhotoUrl(person.photo_url) || '',
+                            x: e.clientX + 15,
+                            y: e.clientY - 325
+                          });
+                        }
                       }}
                       onMouseLeave={() => setPhotoPreview(null)}
                       onClick={(e) => e.stopPropagation()}
