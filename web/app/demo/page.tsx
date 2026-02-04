@@ -872,32 +872,26 @@ export default function DemoPage() {
                       className="photo-zoom-icon"
                       onMouseEnter={(e) => {
                         e.stopPropagation();
-                        const previewWidth = 650;
-                        const previewHeight = 650;
-                        const padding = 10;
+                        const previewSize = 650;
+                        const offset = 20;
                         
-                        let x = e.clientX + padding;
-                        let y = e.clientY + padding;
+                        // Start with cursor position plus offset
+                        let x = e.clientX + offset;
+                        let y = e.clientY + offset;
 
-                        // Check right edge
-                        if (x + previewWidth > window.innerWidth - padding) {
-                          x = e.clientX - previewWidth - padding;
+                        // If preview would go off right edge, position it to the left of cursor
+                        if (x + previewSize > window.innerWidth) {
+                          x = e.clientX - previewSize - offset;
                         }
                         
-                        // Check bottom edge
-                        if (y + previewHeight > window.innerHeight - padding) {
-                          y = e.clientY - previewHeight - padding;
+                        // If preview would go off bottom edge, position it above cursor
+                        if (y + previewSize > window.innerHeight) {
+                          y = e.clientY - previewSize - offset;
                         }
                         
-                        // Check left edge
-                        if (x < padding) {
-                          x = padding;
-                        }
-                        
-                        // Check top edge
-                        if (y < padding) {
-                          y = padding;
-                        }
+                        // Final boundary checks to ensure it stays on screen
+                        x = Math.max(10, Math.min(x, window.innerWidth - previewSize - 10));
+                        y = Math.max(10, Math.min(y, window.innerHeight - previewSize - 10));
 
                         setPhotoPreview({
                           personId: person.id,
@@ -909,32 +903,26 @@ export default function DemoPage() {
                       onMouseMove={(e) => {
                         e.stopPropagation();
                         if (photoPreview?.personId === person.id) {
-                          const previewWidth = 650;
-                          const previewHeight = 650;
-                          const padding = 10;
+                          const previewSize = 650;
+                          const offset = 20;
                           
-                          let x = e.clientX + padding;
-                          let y = e.clientY + padding;
+                          // Start with cursor position plus offset
+                          let x = e.clientX + offset;
+                          let y = e.clientY + offset;
 
-                          // Check right edge
-                          if (x + previewWidth > window.innerWidth - padding) {
-                            x = e.clientX - previewWidth - padding;
+                          // If preview would go off right edge, position it to the left of cursor
+                          if (x + previewSize > window.innerWidth) {
+                            x = e.clientX - previewSize - offset;
                           }
                           
-                          // Check bottom edge
-                          if (y + previewHeight > window.innerHeight - padding) {
-                            y = e.clientY - previewHeight - padding;
+                          // If preview would go off bottom edge, position it above cursor
+                          if (y + previewSize > window.innerHeight) {
+                            y = e.clientY - previewSize - offset;
                           }
                           
-                          // Check left edge
-                          if (x < padding) {
-                            x = padding;
-                          }
-                          
-                          // Check top edge
-                          if (y < padding) {
-                            y = padding;
-                          }
+                          // Final boundary checks to ensure it stays on screen
+                          x = Math.max(10, Math.min(x, window.innerWidth - previewSize - 10));
+                          y = Math.max(10, Math.min(y, window.innerHeight - previewSize - 10));
 
                           setPhotoPreview({
                             personId: person.id,
