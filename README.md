@@ -4,7 +4,31 @@ Full-stack family tree building and management application with AI integration f
 
 ## ✨ Latest Features (February 2026)
 
-### 🖼️ Multi-Image Support
+### � User Menu & Authentication
+- **User Dropdown Menu** - Display logged-in user name in header
+- **Profile Access** - Quick access to user profile page
+- **Logout** - Easy logout from dropdown menu
+- **Removed Active Users Counter** - Replaced with more useful user menu
+
+### 🗺️ Canvas Navigation & Persistence
+- **Canvas Location Display** - Real-time display of canvas position (Latitude/Longitude) and zoom level
+- **Position Persistence** - Canvas automatically remembers your position when you navigate away and return
+- **Per-Tree Positions** - Each tree saves its own canvas position independently
+- **Lazy State Initialization** - Instant loading of saved positions on page load
+
+### 🖼️ Enhanced Photo Features
+- **Full-Resolution Photo Preview** - Hover over magnifying glass icon to see original images
+- **550x550px Preview Popup** - Properly sized preview with blurred background for non-square images
+- **Original Image Display** - Preview shows original uploaded images, not thumbnails
+- **Smart Positioning** - Preview popup follows cursor and avoids screen edges
+- **Blurred Background Padding** - Beautiful blur effect fills empty space around non-square photos
+
+### 📤 Export Improvements
+- **Fixed SVG Export** - SVG exports now include proper photo URLs
+- **Fixed PNG Export** - PNG exports now display photos correctly
+- **Correct Image Paths** - Both exports use full API URLs for images
+
+### �🖼️ Multi-Image Support
 - **Multiple Photos per Person** - Add unlimited photos to each person profile
 - **Primary Image Selection** - Choose which photo appears on the tree canvas
 - **Drag & Drop Upload** - Drag images directly onto person nodes in the canvas
@@ -83,6 +107,10 @@ Full-stack family tree building and management application with AI integration f
   - Name suggestions
 
 ### Additional Features
+✅ **User Menu** - Dropdown menu with user name, profile, and logout
+✅ **Canvas Position Tracking** - Display and persist canvas location (lat/long/zoom)
+✅ **Photo Preview** - Hover magnifying glass shows 550x550px original image with blur padding
+✅ **Export Fixes** - SVG and PNG exports now include correct photo URLs
 ✅ **Settings & Preferences** - Customize themes and layouts
 ✅ **Export Options** - Export family trees (PDF, GEDCOM, JSON - UI ready)
 ✅ **Responsive Design** - Works on desktop and mobile
@@ -520,7 +548,17 @@ famtree/
 
 ## Recent Updates
 
-### February 2026
+### February 4, 2026
+- ✅ User menu with profile and logout (replaced active users counter)
+- ✅ Canvas location display (Latitude, Longitude, Zoom) in sidebar
+- ✅ Canvas position persistence with lazy initialization
+- ✅ Photo preview popup (550x550px with blurred background)
+- ✅ Original images in preview (not thumbnails)
+- ✅ Fixed SVG export photo URLs
+- ✅ Fixed PNG export photo URLs
+- ✅ Smart popup positioning near cursor
+
+### Earlier February 2026
 - ✅ Multi-image support with drag & drop onto canvas nodes
 - ✅ Primary image selection for person profiles
 - ✅ .famtree file format with embedded images
@@ -536,6 +574,14 @@ famtree/
 
 ## Known Issues & Fixes
 
+- **Fixed**: Canvas always loading at position 0,0 instead of saved location
+  - Solution: Lazy initialization of zoom and pan state from localStorage
+- **Fixed**: Photo preview showing cropped thumbnails instead of original images
+  - Solution: Created getOriginalPhotoUrl helper to convert thumbnail paths to originals
+- **Fixed**: Photo preview appearing at bottom-right instead of near cursor
+  - Solution: Moved popup outside transformed canvas container for proper fixed positioning
+- **Fixed**: SVG/PNG exports showing broken image links
+  - Solution: Use getPhotoUrl() to resolve relative paths to full API URLs
 - **Fixed**: Import error "SQLITE_CONSTRAINT: NOT NULL constraint failed: relationships.tree_id"
   - Solution: Added tree_id parameter to relationship INSERT statements in both import endpoints
 - **Fixed**: Blade buttons scrolling out of view
