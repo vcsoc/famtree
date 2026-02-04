@@ -115,7 +115,7 @@ export default function TreeBuilderPage() {
         panRef.current = panPos;
       }
     }
-  }, []);
+  }, [treeId]);
 
   const personMap = useMemo(
     () => new Map(people.map((p) => [p.id, p])),
