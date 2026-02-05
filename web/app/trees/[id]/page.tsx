@@ -1107,7 +1107,7 @@ export default function TreeBuilderPage() {
     if (isPanning) {
       const dx = event.clientX - panStart.x;
       const dy = event.clientY - panStart.y;
-      setPan(prev => ({ x: prev.x + dx, y: prev.y + dy }));
+      setPan((prev: { x: number; y: number }) => ({ x: prev.x + dx, y: prev.y + dy }));
       setPanStart({ x: event.clientX, y: event.clientY });
       return;
     }

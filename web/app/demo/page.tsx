@@ -1017,6 +1017,7 @@ export default function DemoPage() {
         )}
 
         </div>
+      </div>
       </section>
 
       {/* Photo Preview Popup - rendered outside canvas to avoid transform issues */}
