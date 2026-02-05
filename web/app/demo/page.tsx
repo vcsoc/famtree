@@ -733,7 +733,7 @@ export default function DemoPage() {
 
                         setContextMenu({ rel, x, y });
                       } else if (e.button === 1) {
-                        const rect = boardRef.current!.getBoardingClientRect();
+                        const rect = boardRef.current!.getBoundingClientRect();
                         setLinkingFromMidpoint({
                           rel,
                           x: midX,
